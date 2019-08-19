@@ -54,11 +54,9 @@ public class NewsTitlesView extends Fragment implements AdapterView.OnItemClickL
 
 
         newsContentView = new NewsContentView();
-        Log.e(TAG, "onItemClick: 创建了NewsContent ." );
 
         bundle.putString("content",mData.get(position).getCotent());
         newsContentView.setArguments(bundle);
-        Log.e(TAG, "onItemClick: Bundle数据传输成功" );
 
         FragmentTransaction ft = fm.beginTransaction();
 //        ft.setCustomAnimations(R., R.anim.fragment_slide_left_exit);
