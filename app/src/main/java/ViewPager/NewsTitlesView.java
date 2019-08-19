@@ -27,7 +27,9 @@ import domain.NewsBean1;
 public class NewsTitlesView extends Fragment implements AdapterView.OnItemClickListener {
     private ArrayList<NewsBean1> mData;
     private FragmentManager fm ;
+    private NewsContentView newsContentView = null;
     private static final String TAG = "NewsTitlesView";
+    private Bundle bundle = new Bundle();
 
 
     public NewsTitlesView(ArrayList<NewsBean1> mData, FragmentManager fm) {
@@ -50,12 +52,16 @@ public class NewsTitlesView extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        NewsContentView newsContentView = new NewsContentView();
-        Bundle bundle = new Bundle();
+
+        newsContentView = new NewsContentView();
+        Log.e(TAG, "onItemClick: 创建了NewsContent ." );
+
         bundle.putString("content",mData.get(position).getCotent());
         newsContentView.setArguments(bundle);
+        Log.e(TAG, "onItemClick: Bundle数据传输成功" );
 
         FragmentTransaction ft = fm.beginTransaction();
+//        ft.setCustomAnimations(R., R.anim.fragment_slide_left_exit);
         ft.replace(R.id.fl_content,newsContentView);
         ft.addToBackStack(null);
         ft.commit();

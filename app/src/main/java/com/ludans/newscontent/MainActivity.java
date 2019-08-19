@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fManager;
     private long exitTime = 0;
     private static final String TAG = "MainActivity";
+    private NewsTitlesView newsTitlesView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
         mData = gson.fromJson(json, new TypeToken<ArrayList<NewsBean1>>() {
         }.getType());
 
-        NewsTitlesView newsTitlesView = new NewsTitlesView(mData, fManager);
+        newsTitlesView = new NewsTitlesView(mData, fManager);
         FragmentTransaction ft = fManager.beginTransaction();
 //        ft.hide(newsTitlesView);
-        ft.addToBackStack(null);
+//        ft.addToBackStack(null);
         ft.replace(R.id.fl_content, newsTitlesView);
         ft.commit();
     }
@@ -83,20 +84,20 @@ public class MainActivity extends AppCompatActivity {
         FrameLayout frameLayout = findViewById(R.id.fl_content);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (fManager.getBackStackEntryCount() == 0) {
-//            if ((System.currentTimeMillis() - exitTime) > 2000) {
-//                Toast.makeText(getApplicationContext(), "再按一次退出程序",
-//                        Toast.LENGTH_SHORT).show();
-//                exitTime = System.currentTimeMillis();
-//            } else {
-//                super.onBackPressed();
-//            }
-//        } else {
-//            fManager.popBackStack();
-////            .setText("新闻列表");
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        if (fManager.getBackStackEntryCount() == 0) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            fManager.popBackStack();
+//            .setText("新闻列表");
+        }
+    }
 }
 
