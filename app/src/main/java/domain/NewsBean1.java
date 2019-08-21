@@ -9,6 +9,15 @@ public class NewsBean1 {
 
     private String cotent;
     private String title;
+    private String time;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getCotent() {
         return cotent;
