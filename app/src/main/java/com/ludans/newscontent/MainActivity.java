@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -46,25 +45,27 @@ public class MainActivity extends AppCompatActivity {
         String saveJson = CacheUtils.getString(MainActivity.this, TARGET_URL);
         if (!TextUtils.isEmpty(saveJson)) {
 //            SharedPreferences中有值，则直接解析
-            Log.e(TAG, "Shared中有数据，现在进行解析....." );
+            Log.e(TAG, "Shared中有数据，现在进行解析.....");
             gson = new Gson();
             mData = gson.fromJson(saveJson, new TypeToken<ArrayList<JsonData>>() {
             }.getType());
-            Log.e(TAG, "解析的数据为： "+mData.get(1).getTitle() );
+            Log.e(TAG, "解析的数据为： " + mData.get(1).getTitle());
 
             initJsonData();
 
-        }else {
-            Log.e(TAG, "联网请求...." );
-        OkHttpUtils.sendRequestWithOkhttp(
-                TARGET_URL,
-                callback);}
+        } else {
+            Log.e(TAG, "联网请求....");
+            OkHttpUtils.sendRequestWithOkhttp(
+                    "http://download.ludashi123.cn/nongshizhidao.json",
+                    callback);
+            Log.e(TAG, "联网获取数据");
+        }
     }
 
     Callback callback = new Callback() {
         @Override
         public void onFailure(@NotNull Call call, @NotNull IOException e) {
-            Log.e(TAG, "联网请求失败" );
+            Log.e(TAG, "联网请求失败");
         }
 
         /* *
@@ -79,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //            将获取的数据缓存
-             CacheUtils.putString(MainActivity.this,TARGET_URL,response.body().string());
+            Log.e(TAG, "联网成功，获取数据" );
+            CacheUtils.putString(MainActivity.this, TARGET_URL, response.body().string());
 //            用Gson解析数据
+            Log.e(TAG, "Respones"+response.body().string() );
             parseJsonWithGson(response);
 //            将Json数据 传入适配器，然后 初始化页面数据
             initJsonData();
@@ -88,14 +91,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void parseJsonWithGson(@NotNull Response response) throws IOException {
-            Log.e(TAG, " 联网请求中....." );
+            Log.e(TAG, " 联网请求中.....");
             gson = new Gson();
-            Log.e(TAG, "响应数据:   "+response.body().string() );
+            Log.e(TAG, "响应数据:   " + response.body().string());
             mData = gson.fromJson(response.body().string(), new TypeToken<ArrayList<JsonData>>() {
             }.getType());
         }
-
-
     };
 
 
