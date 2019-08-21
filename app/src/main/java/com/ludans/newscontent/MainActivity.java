@@ -80,21 +80,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //            将获取的数据缓存
-            Log.e(TAG, "联网成功，获取数据" );
-            CacheUtils.putString(MainActivity.this, TARGET_URL, response.body().string());
+//            Log.e(TAG, "联网成功，获取数据:"+response.body().string() );
+
+            // 这里出现了一个 bug  , response.body 不能调用多次.
+            String result = response.body().string();
+            CacheUtils.putString(MainActivity.this, TARGET_URL, result);
 //            用Gson解析数据
-            Log.e(TAG, "Respones"+response.body().string() );
-            parseJsonWithGson(response);
+//            Log.e(TAG, "Respones"+response.body().string() );
+            parseJsonWithGson(result);
 //            将Json数据 传入适配器，然后 初始化页面数据
             initJsonData();
 
         }
 
-        private void parseJsonWithGson(@NotNull Response response) throws IOException {
+        private void parseJsonWithGson(String response) throws IOException {
             Log.e(TAG, " 联网请求中.....");
             gson = new Gson();
-            Log.e(TAG, "响应数据:   " + response.body().string());
-            mData = gson.fromJson(response.body().string(), new TypeToken<ArrayList<JsonData>>() {
+            Log.e(TAG, "响应数据:   " + response);
+            mData = gson.fromJson(response, new TypeToken<ArrayList<JsonData>>() {
             }.getType());
         }
     };
