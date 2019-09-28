@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
             initJsonData();
 
         } else {
-            Log.e(TAG, "联网请求....");
+            Log.e(TAG, "初始化，联网请求");
             OkHttpUtils.sendRequestWithOkhttp(
                     "http://download.ludashi123.cn/nongshizhidao.json",
                     callback);
-            Log.e(TAG, "联网获取数据");
+
         }
     }
 
@@ -80,10 +80,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //            将获取的数据缓存
-//            Log.e(TAG, "联网成功，获取数据:"+response.body().string() );
+
 
             // 这里出现了一个 bug  , response.body 不能调用多次.
             String result = response.body().string();
+            Log.e(TAG, "联网成功，获取数据:" );
             CacheUtils.putString(MainActivity.this, TARGET_URL, result);
 //            用Gson解析数据
 //            Log.e(TAG, "Respones"+response.body().string() );
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void parseJsonWithGson(String response) throws IOException {
-            Log.e(TAG, " 联网请求中.....");
+
             gson = new Gson();
             Log.e(TAG, "响应数据:   " + response);
             mData = gson.fromJson(response, new TypeToken<ArrayList<JsonData>>() {
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = fManager.beginTransaction();
         ft.replace(R.id.fl_content, newsTitlesView);
         ft.commit();
+        Log.e(TAG, "提交NewsTitles");
     }
 
     private void initView() {
